@@ -1,0 +1,63 @@
+version: '3'
+
+services:
+#   apache2:
+#     build:
+#       context: .
+#     volumes:
+#       # read_only: false
+#       - ./quickstart:/usr/local/apache2/htdocs/
+#     #entrypoint: tail -f /dev/null
+#     ports:
+#       - 8080:8080
+#       - 44380:443
+  www:
+    build: .
+    ports:
+      - 8080:8080
+#    volumes:
+#      - ./quickstart:/var/www/html/
+    links:
+      - db
+    networks:
+      - default
+  db:
+    image: mysql
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_DATABASE: db
+      MYSQL_USER: db
+      MYSQL_PASSWORD: db
+      MYSQL_ROOT_PASSWORD: db
+#    volumes:
+#      - ./dump:/docker-entrypoint-initdb.d
+#      - persistent:/var/lib/mysql
+    networks:
+      - default
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    links:
+      - db:db
+    ports:
+      - 8000:80
+    environment:
+      MYSQL_USER: user
+      MYSQL_PASSWORD: test
+      MYSQL_ROOT_PASSWORD: test
+volumes:
+  persistent:
+##################################################################################
+
+# db:
+#  container_name: db
+#  image: mysql
+#  restart: always
+#  environment:
+#    MYSQL_ROOT_PASSWORD: MYSQL_ROOT_PASSWORD
+#    MYSQL_DATABASE: MY_DATABASE
+#    MYSQL_USER: MYSQL_USER
+#    MYSQL_PASSWORD: MYSQL_PASSWORD
+#  ports:
+#    - 3306:3306
+
